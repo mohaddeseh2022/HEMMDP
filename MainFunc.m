@@ -10,12 +10,6 @@ BLOCK_START=S.BLOCK_START;
 Scount=popSize;
 varnumber = size(trainD,2)-1;
 
-% persistent M 
-% if isempty(M)
-%     M=0;
-% end
-% M=M+1;
-
 [p0,p1,p11,p2,p22,p3,p33,p4,p44]=Standard_Prob(buffer,popSize);
 p0bar=p0;
 p1bar=p1;
@@ -131,18 +125,10 @@ for j=1:2
         if i==1 && j==1
             tprim=0; %tprime;
         end
-        % if i==1
-        % popSizep=400;
-        % else
-        % popSizep=floor(400/i);
-        % end
+       
         
         if (j==1 && i>1)
-%             dummy=1;
-%             popSizep=100;
-%             poprandomsize=popSize+tprim+floor(popSizep/i);
-%             poprandom = initialPopStGP_ver3(poprandomsize-popSize-tprim+1,trainD,1);
-       poprandomsize=popSize+tprim;
+            poprandomsize=popSize+tprim;
         elseif (j>1 && i==1)
             tprim=0;
             popSizep=200; %500
@@ -154,26 +140,10 @@ for j=1:2
             poprandom = initialPopStGP_Final(poprandomsize-popSize-tprim+1,trainD,BlockValue,newnum,BSPlusJ,Coeff,j,1);%%10 instead of num %10 instead of 10*(j-1)
         end
         
-       
-        % k=1;
-        % if i>1
-        % for h=savedtprim+savedpopSize:savedtprim+savedpopSize+popSizep
-        %     popmodel.indiv(h).value=poprandom.indiv(k).value;
-        %     popmodel.indiv(h).rand=poprandom.indiv(k).rand;
-        %     k=k+1;
-        % end
-        % popSize=savedpopSize+popSizep;
-        % end
         
         if (i==1 && j>1)
             clear popmodel
             popmodel=poprandom;
-            %h=1;
-%             for r=popSize+1:popSize+tprim
-%             popmodel.indiv{r}.value=sortedpop.indiv(h).value;
-%             popmodel.indiv{r}.rand=sortedpop.indiv(h).rand;
-%             h=h+1;
-%             end
         end
         
         clear popsortmodel
@@ -382,16 +352,6 @@ for j=1:2
         disp(MI1(1))
         MShD(alphcount,gen*(j-1)+i)=mean(MI1);
         MShDprime(alphcount,gen*(j-1)+i)=MImean(i);
-%         labBarrier
-%         for srcWkrIdx=1:12
-%         if labindex == srcWkrIdx
-%             data = MI1(1);
-%             shared_data = labBroadcast(srcWkrIdx,data);
-%         else
-%             shared_data(srcWkrIdx) = labBroadcast(srcWkrIdx);
-%         end
-%         end
-% MShD(gen*(j-1)+i)=mean(shared_data);
         
         if j>1
             [Sbuffer,Srnd,popS,~]=EliminateSimilar(Sbuffer,Srnd,popSize,trainD,validD,BlockValue,1,1,j,2); %i as the last input
@@ -427,11 +387,6 @@ for j=1:2
         TestMI(i)=testdataMI;
         
     end
-    
-    %(((((((((((((((((((((inja))))))))))))))))))))))))
-    
-    % plot_Final(MImean,MIvalidmean,MIvar,MImax,i,j)
-    % plot_Test(TestMI,i,j)
     
     if t>10
         num=10;
